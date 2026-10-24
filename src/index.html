@@ -3,19 +3,23 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width" />
         <title>lxft.dev</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap"
+            rel="stylesheet"
+        />
     </head>
     <style>
         pre {
-            display: flex;
-            justify-content: center;
             transform: scale(0.8);
-            font-smooth: never;
-            -webkit-font-smoothing: none;
+            font-family: inherit;
+            font-weight: 400;
         }
 
         body {
-            background: #141414;
-            color: #eee;
+            background: linear-gradient(180deg, #0073c4 0%, #10a0df 100%);
+            color: #666;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -27,11 +31,12 @@
             height: 100%;
             margin: 0;
             overflow: hidden;
-            font-family: monospace;
+            font-family: "JetBrains Mono", monospace;
+            font-weight: 400;
         }
 
         a {
-            color: #eee;
+            color: inherit;
         }
 
         div {
@@ -47,6 +52,17 @@
             display: flex;
             flex-direction: column;
         }
+
+        .character {
+            display: inline-block;
+            width: 1ch;
+            margin-right: 1px;
+            background: #fff;
+        }
+
+        .character.space {
+            background: transparent;
+        }
     </style>
     <body>
         <pre>
@@ -59,10 +75,33 @@
     ########## ###    ### ###            ###
         </pre>
         <div id="main-text">
-            welcome to empty space!
+            <span>welcome to empty space!</span>
             <a href="https://github.com/linuxfight">github</a>
             <a href="https://t.me/linuxfight">telegram</a>
-            mail -> admin@lxft.dev
+            <span>mail -&gt; admin@lxft.dev</span>
         </div>
+        <script>
+            for (const container of document.querySelectorAll("pre, #main-text")) {
+                const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+                const nodes = [];
+                while (walker.nextNode()) {
+                    if (walker.currentNode.textContent.trim()) nodes.push(walker.currentNode);
+                }
+                for (const node of nodes) {
+                    const fragment = document.createDocumentFragment();
+                    for (const character of node.textContent) {
+                        if (character === "\n" || character === "\r") {
+                            fragment.append(document.createTextNode(character));
+                            continue;
+                        }
+                        const span = document.createElement("span");
+                        span.className = /\s/.test(character) ? "character space" : "character";
+                        span.textContent = character;
+                        fragment.append(span);
+                    }
+                    node.replaceWith(fragment);
+                }
+            }
+        </script>
     </body>
 </html>
