@@ -3,14 +3,23 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width" />
         <title>lxft.dev</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap"
-            rel="stylesheet"
+            rel="preload"
+            href="/JetBrainsMono-Regular.ttf"
+            as="font"
+            type="font/ttf"
+            crossorigin
         />
     </head>
     <style>
+        @font-face {
+            font-family: "JetBrains Mono";
+            src: url("/JetBrainsMono-Regular.ttf") format("truetype");
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+        }
+
         pre {
             transform: scale(0.8);
             font-family: inherit;
@@ -53,15 +62,8 @@
             flex-direction: column;
         }
 
-        .character {
-            display: inline-block;
-            width: 1ch;
-            margin-right: 1px;
+        .text-run {
             background: #fff;
-        }
-
-        .character.space {
-            background: transparent;
         }
     </style>
     <body>
@@ -89,14 +91,14 @@
                 }
                 for (const node of nodes) {
                     const fragment = document.createDocumentFragment();
-                    for (const character of node.textContent) {
-                        if (character === "\n" || character === "\r") {
-                            fragment.append(document.createTextNode(character));
+                    for (const run of node.textContent.match(/\s+|\S+/g)) {
+                        if (/^\s+$/.test(run)) {
+                            fragment.append(document.createTextNode(run));
                             continue;
                         }
                         const span = document.createElement("span");
-                        span.className = /\s/.test(character) ? "character space" : "character";
-                        span.textContent = character;
+                        span.className = "text-run";
+                        span.textContent = run;
                         fragment.append(span);
                     }
                     node.replaceWith(fragment);
