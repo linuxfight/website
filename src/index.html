@@ -5,7 +5,7 @@
         <title>lxft.dev</title>
         <link
             rel="preload"
-            href="/JetBrainsMono-Regular.ttf"
+            href="/BlockZone.ttf"
             as="font"
             type="font/ttf"
             crossorigin
@@ -13,8 +13,8 @@
     </head>
     <style>
         @font-face {
-            font-family: "JetBrains Mono";
-            src: url("/JetBrainsMono-Regular.ttf") format("truetype");
+            font-family: "BlockZone";
+            src: url("/BlockZone.ttf") format("truetype");
             font-style: normal;
             font-weight: 400;
             font-display: swap;
@@ -26,84 +26,58 @@
             font-weight: 400;
         }
 
+        html,
         body {
-            background: linear-gradient(180deg, #0073c4 0%, #10a0df 100%);
-            color: #666;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: "BlockZone", monospace;
+            font-weight: 400;
+            text-align: center;
+
+            background: #0000AA;
+            color: #bbbbbb;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            overflow: hidden;
-            font-family: "JetBrains Mono", monospace;
-            font-weight: 400;
-        }
-
         a {
             color: inherit;
+            margin: 0.5em;
         }
 
         div {
             display: flex;
-            gap: 16px;
-        }
-
-        .hidden {
-            display: none;
         }
 
         #main-text {
+            margin-top: 0.5em;
             display: flex;
-            flex-direction: column;
         }
 
-        .text-run {
-            background: #fff;
+        #logo {
+            background-color: #bbbbbb;
+            color: #0000AA;
         }
     </style>
     <body>
-        <pre>
-    :::        :::    ::: :::::::::: :::::::::::
-    :+:        :+:    :+: :+:            :+:
-    +:+         +:+  +:+  +:+            +:+
-    +#+          +#++:+   :#::+::#       +#+
-    +#+         +#+  +#+  +#+            +#+
-    #+#        #+#    #+# #+#            #+#
-    ########## ###    ### ###            ###
-        </pre>
+        <div id="logo">
+            <pre>
+   ██╗     ██╗  ██╗███████╗████████╗
+   ██║     ╚██╗██╔╝██╔════╝╚══██╔══╝
+██║      ╚███╔╝ █████╗     ██║
+██║      ██╔██╗ ██╔══╝     ██║
+███████╗██╔╝ ██╗██║        ██║
+╚══════╝╚═╝  ╚═╝╚═╝        ╚═╝
+            </pre>
+        </div>
+
         <div id="main-text">
-            <span>welcome to empty space!</span>
             <a href="https://github.com/linuxfight">github</a>
             <a href="https://t.me/linuxfight">telegram</a>
-            <span>mail -&gt; admin@lxft.dev</span>
+            <a href="mailto:admin@lxft.dev">email</a>
         </div>
-        <script>
-            for (const container of document.querySelectorAll("pre, #main-text")) {
-                const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
-                const nodes = [];
-                while (walker.nextNode()) {
-                    if (walker.currentNode.textContent.trim()) nodes.push(walker.currentNode);
-                }
-                for (const node of nodes) {
-                    const fragment = document.createDocumentFragment();
-                    for (const run of node.textContent.match(/\s+|\S+/g)) {
-                        if (/^\s+$/.test(run)) {
-                            fragment.append(document.createTextNode(run));
-                            continue;
-                        }
-                        const span = document.createElement("span");
-                        span.className = "text-run";
-                        span.textContent = run;
-                        fragment.append(span);
-                    }
-                    node.replaceWith(fragment);
-                }
-            }
-        </script>
     </body>
 </html>
